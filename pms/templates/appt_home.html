@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Book Appointment - Health Management System{% endblock %}
+
+{# {% block welcome_msg %}<h1>Welcome to Health Management System</h1>{% endblock %} #}
+
+{% block header %}
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            {% include 'menu.html' %}
+
+		<a class="navbar-brand" href="/">Health Management System</a>
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-user-circle"></i>
+                        <span>{{ request.session.login_name }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                       <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+    </header>
+{% endblock %}
+{% block content %}
+
+    <div class="form-section inner-form">
+        {% if result %}
+        <center><h5>Appointment slots for {{ spec }}, {{ hosp_name }} in the next 10 days</h5></center>
+        <a href='/book_appt'>Back to appointments home</a>
+        {% elif slot_name %}
+        <center><h5>Dear {{ pat_fname }}, <br>
+        Your appointment with Dr. {{ doc_name}} at {{ hospital_name }}, {{ hospital_city }} in {{ spec }} department is confirmed on {{ dt }} in slot {{ slot_name }}
+        <br>
+        Your appointment id is {{ appt_id }}
+        </h5></center>
+        {% else %}
+        <h3>Book Appointment</h3>
+        {% endif %}
+
+        {% if doc_avail == 0 %}
+        No doctors available <br>
+        <a href='/book_appt'>Back to appointments home</a>
+        {% endif %}
+
+        <form action='' id='appt_form' method='POST'>
+            {% csrf_token %}
+            {% if form.hospitals %}
+            <div class="form-group row">
+              <label class="col-sm-5"><i class="fas fa-stethoscope"></i>Select Hospital<span class="colon">:</span> </label>
+              <div class="col-sm-7">
+              <div class="selectdiv ">
+              {{ form.hospitals }}
+
+              </div>
+              </div>
+
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-5"><i class="fas fa-stethoscope"></i>Select Speciality<span class="colon">:</span> </label>
+                <div class="col-sm-7">
+                <div class="selectdiv ">
+                  {{ form.specialities }}
+
+                </div>
+                </div>
+
+            </div>
+
+            <div class="col-sm-12 text-center">
+                <div class='red' id='msg_red'></div><div class='green' id='msg_green'></div>
+            <input type="submit" class="btn submit" value="Submit"> 
+            </div>
+            {% endif %}
+        </form>
+            
+
+            {% if result %}
+            <div class="form-group row">
+            <table class="table-styles">
+                <tr>
+                    <th>Date</th>
+                    <th>Slot 1<br>(11AM - 12PM)</th>
+                    <th>Slot 2<br>(12PM - 1PM)</th>
+                    <th>Slot 3<br>(2PM - 3PM)</th>
+                    <th>Slot 4<br>(3PM - 4PM)</th>
+                    <th>Doctor</th>
+                </tr>
+                {% for x in result %}                
+                <tr>
+                    <td>{{ x.dt }}</td>
+                    {% for slot in x.slot_data %}
+                    <td>
+                        {% if slot.status == "Book now" %}
+                        <a onclick = "return confirm('Confirm appointment booking?')" href='/book_appt/{{pat_id}}/{{x.doctor.id}}/{{slot.slot_id}}/{{hosp_id}}/{{spec}}/{{x.dt2}}'>
+                            <i class="far fa-hand-point-right"></i>{{ slot.status }}</a>
+                        {% else %}
+                        {{ slot.status }}
+                        {% endif %}
+                
+                    </td>
+                    {% endfor %}
+                    <td>
+                        <a href='/doc_profile/{{ x.doctor.id }}' title='Link to doctor profile page'>
+                            Dr. {{ x.doctor.first_name }} {% if x.doctor.last_name %} {{ x.doctor.last_name }} {% endif %}
+                        </a>
+                    </td>
+                    {% comment %}
+                    <td>
+                        {% if x.status == "Book now" %}
+                        <a onclick = "confirm('Confirm appointment booking?')" href='/book_appt/{{pat_id}}/{{x.doctor.id}}/{{x.slot_id}}/{{hosp_id}}/{{spec}}/{{x.dt2}}'><i class="far fa-hand-point-right"></i>{{ x.status }}</a>
+                        {% else %}
+                        {{ x.status }}
+                        {% endif %}
+                        
+                    </td>
+                    {% endcomment %}
+                </tr>
+                {% endfor %}
+            </table>
+            </div>
+            {% endif %}
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        // $("#reg").on("submit", validate);
+        $("#appt_form").submit(validate);
+        $("#id_hospitals").on("change", validate);
+        $("#id_specialities").on("change", validate);
+
+        function validate() {
+            // console.log( $("#id_email").val() );
+            var hosp_id = $("#id_hospitals").val();
+            var spec = $("#id_specialities").val();
+
+            console.log(hosp_id+' '+spec);
+
+            $.ajax({
+                url: '/check_doc_hosp_avail/',
+                // type: 'GET', // defaut method is GET
+                data: {'hosp_id': hosp_id, 'spec': spec},
+                context: this,
+                dataType: 'json',
+
+                beforeSend: function() {
+                        // $("#add_msg").html("Processing...")
+                        $("#msg_red").html('');
+                        $("#msg_green").html('');
+                    },
+                
+                success: function (data) {
+                    var num_docs = data.num_docs;
+
+                    if (num_docs == 0) {
+                        $("#msg_red").html("Sorry no doctors available in selected options")
+                    }
+                    else {
+                        $("#msg_green").html(num_docs + " doctors available");
+                        this.submit();
+                    }
+                    // $("#msg").html(data.num_docs);
+
+                    // if (data.is_taken) {
+                    //     $("#email_na").html("A user with this username already exists");
+                    //     $("#email_av").html("");
+                    //     // alert("aaa");
+                    // }
+                    // else { 
+                    //     $("#email_av").html("Email id available");
+                    //     $("#email_na").html("");
+                    //     this.submit();
+                    //     }
+                }
+            });
+            return false;
+         
+        }
+
+    </script>
+
+{% endblock %}

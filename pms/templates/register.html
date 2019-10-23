@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register - Health Management System{% endblock %}
+
+{# {% block welcome_msg %}<h1>Welcome to Health Management System</h1>{% endblock %} #}
+
+        {% block header %}
+        <body class="home-bg">
+    	<header>
+        <section class="container-fluid">
+        	{% include 'menu.html' %}
+        <a class="navbar-brand" href="/">Health Management System</a>
+        </section>
+    </header>
+        {% endblock %}
+
+{% block content %}
+
+<div class="form-section">
+	{% if utype == 'p' %}
+	<h3>Patient Registration</h3>
+	{% elif utype == 'd' %}
+	<h3>Doctor Registration</h3>
+	{% endif %}
+
+	{% if submitted %}
+	Your registration is complete. Please check email for login details. Thank you.
+	<br>
+	<a href='/login'>Click here to login</a>
+
+	{{ form.errors }}
+
+	{% else %}
+	
+	<form id="reg" action="" method="POST" novalidate>
+		{% csrf_token %}
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-pencil-alt"></i>
+	        First Name <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.first_name }} 
+	        	{{ form.first_name.errors }}
+	    	</div>
+		</div>
+
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-pencil-alt"></i>
+	        Last Name <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.last_name }} 
+	        	{{ form.last_name.errors }}
+	    	</div>
+		</div>
+
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-transgender"></i>
+	        Gender <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	<div class="selectdiv">
+
+	        	{{ form.gender }} 
+	        	{{ form.gender.errors }}
+	        	</div>
+	    	</div>
+		</div>
+
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-envelope"></i>
+	        Email <span class="colon">:</span>
+	        <small>({{ form.email.help_text|safe }})</small>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.email }} 
+	        	{{ form.email.errors }}
+	        	<span class="red" id='email_na'></span>
+	        	<span class="green" id='email_av'></span>
+	    	</div>
+		</div>
+
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-envelope"></i>
+	        Password <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.password }} 
+	        	{{ form.password.errors }}
+	    	</div>
+		</div>
+
+		{% if form.hospitals %}
+		<div class="form-group row">
+
+			<label class="col-sm-5"><i class="fas fa-edit"></i>
+	        Select Hospital <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7 check-label"> 
+	        	<div class="selectdiv">{{ form.hospitals }} </div>
+	    	</div>
+	    
+		</div>
+		{% endif %}
+
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-mobile-alt"></i>
+	        Mobile Number <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.mobile }} 
+	        	{{ form.mobile.errors }}
+	    	</div>
+		</div>
+
+		{% if form.address %}
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-edit"></i>
+	        Address <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.address }} 
+	        	{{ form.address.errors }}
+	    	</div>
+		</div>
+
+		{% elif form.education %}
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-edit"></i>
+	        Education <span class="colon">:</span>
+	        <small>({{ form.education.help_text|safe }})</small>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.education }} 
+	        	{{ form.education.errors }}
+	    	</div>
+		</div>
+		{% endif %}
+	
+
+		{% if form.specialities %}
+		<div class="form-group row">
+
+			<label class="col-sm-5"><i class="fas fa-edit"></i>
+	        Specialisations <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7 check-label"> 
+	        	<div class="selectdiv">{{ form.specialities }} </div>
+	        	{{ form.specialities.error }}
+	        	<span class='red' id='spec'></span>
+	    	</div>
+	    	</div>
+		{% endif %}
+
+		{% if form.city %}
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-city"></i>
+	        City <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.city }} 
+	        	{{ form.city.errors }}
+	    	</div>
+		</div>
+		{% elif form.alma_mater %}
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-city"></i>
+	        Alma Mater <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.alma_mater }} 
+	        	{{ form.alma_mater.errors }}
+	    	</div>
+		</div>
+		{% endif %}
+
+		{% if form.pincode %}
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-city"></i>
+	        Postal Code <span class="colon">:</span>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.pincode }} 
+	        	{{ form.pincode.errors }}
+	    	</div>
+		</div>
+		{% elif form.total_exp %}
+		<div class="form-group row">
+	        <label class="col-sm-5"><i class="fas fa-city"></i>
+	        Total Experience <span class="colon">:</span>
+	        <small>({{ form.total_exp.help_text|safe }})</small>
+		    </label>
+	        <div class="col-sm-7"> 
+	        	{{ form.total_exp }} 
+	        	{{ form.total_exp.errors }}
+	    	</div>
+		</div>
+		{% endif %}
+
+		<input type="submit" class="btn" value="Register">
+	</form>
+	{% endif %}
+</div>
+
+{% comment %}
+<div class="form-section">
+	<form action="" method="POST" novalidate>
+		{% for field in form %}
+		    <div class="form-group row">
+		        {{ field.errors }}
+			        <label class="col-sm-5"><i class="fas fa-pencil-alt"></i> {{ field.label_tag }}
+	    		    {% if field.help_text %}
+	    		        <small>{{ field.help_text|safe }}</small>
+	    		    {% endif %}
+    		    </label>
+		        <div class="col-sm-7">
+		       	{{ field }}
+		        </div>
+		   </div>
+		{% endfor %}
+	</form>
+</div>
+{% endcomment %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript">
+	    // $("#reg").on("submit", validate);
+	    $("#reg").submit(validate);
+	    $("#id_email").on("blur", validate);
+	    $('#id_specialities').on("change", spec_validate);
+
+	    function spec_validate() {
+	    	var spec = $("#id_specialities").val()
+
+	    	if (spec == '') {
+	    		$("#spec").html("Please select speciality");
+	    	}
+	    	else {
+	    		$("#spec").html("");
+
+	    	}
+	    }
+
+	    function validate() {
+		    // console.log( $("#id_email").val() );
+		    var username = $("#id_email").val();
+		    console.log(username)
+	    	console.log($('#id_specialities').val())
+
+		    if (username.indexOf('@') == -1) {
+		    	$("#email_na").html("Invalid e-mail id");
+		    	return false;
+		    }
+		    else {
+		    	$("#email_na").html("");
+
+		    }
+
+
+		    $.ajax({
+		    	url: '/validate_username/',
+		    	// type: 'GET', // defaut method is GET
+	            data: {'email': username},
+	            context: this,
+	            dataType: 'json',
+	            
+	            success: function (data) {
+	            	if (data.is_taken) {
+	            		$("#email_na").html("A user with this username already exists");
+		                $("#email_av").html("");
+		                // alert("aaa");
+		            }
+		            else { 
+		            	$("#email_av").html("Email id available");
+	              		$("#email_na").html("");
+
+	              		if( $('#id_specialities').val() == '' ) {
+	              			$("#spec").html("Please select speciality");	              			
+	              			}
+	              			else {
+	              				this.submit();
+
+	              			}
+	          			}
+	            }
+	        });
+	        return false;
+
+
+	        if( $('#id_specialities').val() == '' ) {
+	        	$("#spec").html("Please select speciality");
+	        	return false;
+	        }
+	     
+	    }
+
+	</script>
+{% endblock %}

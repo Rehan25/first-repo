@@ -1,0 +1,549 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Welcome to Health Management System{% endblock %}
+
+{# {% block welcome_msg %}<h1>Welcome to Health Management System</h1>{% endblock %} #}
+
+{% block header %}
+<!-- Navigation Menu styles-->
+ <style>
+.nav_menu .dropbtn {
+  padding: 0px;
+  border: none;
+  margin: 10px 10px 7px 0;
+  background: transparent;
+}
+
+.nav_menu.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav_menu .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1aa1a1;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border: solid 1px #20b9b9;
+	    border-radius: 3px;
+		    margin-top: 5px
+}
+.nav_menu .dropdown-content:after {
+    content: "";
+    position: absolute;
+    border-bottom: solid 13px #1aa1a1;
+    border-left: solid 8px transparent;
+    border-right: solid 8px transparent;
+    border-top: solid 8px transparent;
+    top: -21px;
+    left: 8px;
+}
+.nav_menu .dropdown-content:before {
+    content: "";
+    position: absolute;
+    border-bottom: solid 13px #20b9b9;
+    border-left: solid 9px transparent;
+    border-right: solid 9px transparent;
+    border-top: solid 9px transparent;
+    top: -23px;
+    left: 7px;
+}
+.nav_menu .dropdown-content a {
+  color: #fff;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.nav_menu .dropdown-content a:hover {background-color:#20b9b9;}
+
+.nav_menu.dropdown:hover .dropdown-content {display: block;}
+
+.nav_menu.dropdown:hover .dropbtn {background-color: #3e8e41;}
+.menu-btn i {
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff;
+    border: solid 1px #20b9b9;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 3px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 4px;
+    background: #1aa1a1;
+}
+.menu-btn i:hover {
+    background: #1daeae;
+}
+.nav_menu .dropdown-content a i {
+    color:#42dcdc;
+    margin-right: 10px;
+}
+h1 {
+    margin: 5px 0 20px;
+}
+</style>  
+<!-- End of Navigation Menu styles-->
+
+<!-- Hexagonal Grid Styles-->
+<style>
+
+#grid-container {
+	width: 1000px;
+	overflow: hidden;
+	padding: 20px;
+	position: relative;
+	margin: 0 auto;
+	margin-bottom: 2.5em;
+	-webkit-transition: all ease 500ms;
+	-moz-transition: all ease 500ms;
+	-o-transition: all ease 500ms;
+	-ms-transition: all ease 500ms;
+	transition: all ease 500ms;
+}
+.grid_item {
+    width: 115px;
+    height: 155px;
+    position: relative;
+    display: inline-block;
+}
+.hexagon2 {
+    position: absolute;
+    width: 114px;
+    height: 306px;
+    top: -85px;
+}
+
+.hexagon {
+	overflow: hidden;
+	visibility: hidden;
+
+	-webkit-transform: rotate(120deg);
+	-moz-transform: rotate(120deg);
+	-o-transform: rotate(120deg);
+	-ms-transform: rotate(120deg);
+	transform: rotate(120deg);
+	cursor: pointer;
+	background-image: url(images/hexa.png);
+}
+
+.hexagon-in1 {
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+
+	-webkit-transform: rotate(-60deg);
+	-moz-transform: rotate(-60deg);
+	-o-transform: rotate(-60deg);
+	-ms-transform: rotate(-60deg);
+	transform: rotate(-60deg);
+}
+
+.hexagon-in2 {
+	background-color:#41b1b1 !important;
+	-webkit-box-shadow: inset 0 0 0 200px rgba(176, 218, 212, 0.48);
+	box-shadow: inset 0 0 0 200px rgba(176, 218, 212, 0.48);
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	visibility: visible;
+	-webkit-transform: rotate(-60deg);
+	-moz-transform: rotate(-60deg);
+	-o-transform: rotate(-60deg);
+	-ms-transform: rotate(-60deg);
+	transform: rotate(-60deg);
+
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+
+.hexagon-in2:hover {
+	-webkit-box-shadow: inset 0 0 0 0px #47cbcb;
+	box-shadow: inset 0 0 0 0px #47cbcb;
+}
+.hexagon-in2.blank {
+    transition: none !important;
+	background:transparent !important;
+	    box-shadow: none;
+}
+
+.hexagon-in2.blank:hover{
+	background:transparent !important;
+	}
+.hexagon-in2 p {
+    color: #fff;
+    font-size: 20px;
+    padding: 4px;
+    position: relative;
+    top: 39%;
+    text-align: center;
+    margin-bottom: 0px;
+}
+.hexagon-in2 p a i {
+    display: block;
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+.hexagon-in2 p a {
+    color: #fff;
+    text-decoration: none;
+}
+  
+#grid-container article {
+    padding-top: 1em;
+    width:830px;
+    margin: 0 auto;
+}
+.grid_item.left-space{
+	 margin-left: 58px;
+}
+.grid_item:nth-child(n+4) {
+	margin-top: -59px;
+}
+.grid_item:nth-child(1) {
+    margin-left: 58px;
+}
+/*.grid_item:nth-child(8n) {
+    margin-left: 58px;
+}*/
+@media (max-width: 1015px) {
+	#grid-container {
+	width: 100%;
+}
+.hexagon-in2.blank,
+.hexagon-in2.blank:hover {
+	background:#41b1b1 !important;
+}
+}
+
+@media (max-width: 992px) and (min-width: 639px)  {
+.grid_item:nth-child(n+4) {
+	margin-top: -59px;
+}
+#grid-container article {
+	width:600px;
+}
+.grid_item.left-space{
+	 margin-left: 0px;
+}
+.grid_item:nth-child(10n),
+.grid_item:nth-child(19n) {
+    margin-left: 58px;
+}
+#grid-container article .grid_item.empty-items.empty-items1 {
+    display: none;
+}
+}
+@media (max-width: 767px){
+#grid-container article .grid_item.empty-items {
+    display: none;
+}
+}
+@media (max-width: 640px) and (min-width: 400px) {
+	#grid-container article {
+	width: 354px;
+}
+.grid_item:nth-child(12n) {
+	margin-left: 0px !important;
+}
+.grid_item:nth-child(18n) {
+	margin-left: 0px !important;
+}
+.grid_item:nth-child(16n) {
+	margin-left: 58px !important;
+}
+.grid_item.left-space{
+	 margin-left: 0px;
+}
+.grid_item:nth-child(6n),
+.grid_item:nth-child(11n) {
+    margin-left: 58px;
+}
+.grid_item:nth-child(n+3) {
+	margin-top: -59px;
+}
+}
+
+@media (max-width: 399px) {
+	#grid-container article {
+	width: 180px;
+}
+.grid_item:nth-child(1),
+.grid_item:nth-child(11n) {
+    margin-left: 0;
+}
+/*.grid_item:nth-child(3n) {
+	margin-left: 0px;
+}*/
+
+.grid_item:nth-child(2n) {
+	margin-left: 58px;
+}
+.grid_item:nth-child(n+2) {
+	margin-top: -58px;
+}
+
+}
+
+</style>
+<!-- End of Hexagonal Grid Styles-->
+
+<body class="home-bg">
+<header>
+<section class="container-fluid">
+  
+  {% include 'menu.html' %}
+<a class="navbar-brand" href="/">Health Management System</a>
+    </section>
+{% comment %}
+ 
+<div class="nav_menu dropdown">
+  <button class="dropbtn menu-btn"><i class="fas fa-bars"></i></button>
+  <div class="dropdown-content">
+ <a href="create-appointment.html"><i class="fas fa-calendar-alt"></i>Create Appointment</a>
+  <a href="create-prescription.html"><i class="fas fa-prescription"></i>Create Prescription</a>
+  <a href="create-referral.html"><i class="fas fa-calendar-alt"></i>Create Referral</a>
+  <a href="search-doctors.html"><i class="fas fa-user-md"></i>Search Doctors</a>
+  </div>
+</div><a class="navbar-brand" href="/">Health Management System</a>
+{% endcomment %}
+</header>
+<h1>Welcome To Health Management System</h1>
+
+{% endblock %}
+
+{% block content %}
+    <section id="grid-container">
+	
+   		 <article>
+
+        <div class="grid_item">		
+        <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2">  
+                 <p><a href="/login"><i class="fas fa-wheelchair"></i>Patient</a>  </p>   
+                   
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2">  
+                       <p><a href="/login"><i class="fas fa-hospital"></i>Hospital</a>  </p>                  
+                </div>
+             </div>
+         </div>
+         </div>
+         <div class="grid_item empty-items">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank">  
+                                  
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item empty-items">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank"> 
+                 <!--<p><a href="/login"><i class="fas fa-user"></i>Doctor</a>  </p>   -->                 
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item empty-items">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank">  
+                   <!-- <p><a href="/register"><i class="fas fa-pencil-alt"></i>Register</a>  </p>   -->           
+                </div>
+             </div>
+         </div>
+         </div>
+ <div class="grid_item empty-items">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank">
+                                                
+                </div>
+             </div>
+         </div>
+         </div>
+ <div class="grid_item empty-items">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank">  
+                                   
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 ">  
+                     <p><a href="/login"><i class="fas fa-user"></i>Doctor</a>  </p>              
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 "> 
+                 <!--<p><a href="/login"><i class="fas fa-user"></i>Doctor</a>  </p>  -->                  
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2">  
+                 <p><a href="/login"><i class="far fa-credit-card"></i>Billing</a>  </p>                     
+                </div>
+             </div>
+         </div>
+         </div>
+              <div class="grid_item">        
+        <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2">  
+                 <p><a href="#"><i class="fas fa-capsules"></i>Pharmacy</a>  </p>                   
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item empty-items">
+          <div class="hexagon hexagon2 ">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank"> 
+                             
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank">
+               <!-- <p><a href="/login"><i class="fas fa-hospital"></i>Hospital</a>  </p>   -->                 
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item left-space">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank"> 
+                      <!--  <p><a href="#"><i class="fas fa-capsules"></i>Pharmacy</a>  </p>  -->          
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank">  
+                                 
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 "> 
+                            <p><a href="#"><i class="fas fa-flask"></i>Lab</a>  </p>         
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2">  
+                    <p><a href="/register"><i class="fas fa-pencil-alt"></i>Register</a>  </p>             
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item empty-items empty-items1">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2"> 
+                                         
+                </div>
+             </div>
+         </div>
+         </div>
+          <div class="grid_item empty-items empty-items1">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2">    
+                       <!--<p><a href="/login"><i class="fas fa-wheelchair"></i>Patient</a>  </p>  -->      
+                </div>
+             </div>
+         </div>
+         </div>
+<div class="grid_item empty-items empty-items1">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank">  
+                                
+                </div>
+             </div>
+         </div>
+         </div>
+         <div class="grid_item empty-items empty-items1">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank">  
+                                
+                </div>
+             </div>
+         </div>
+         </div>
+         <div class="grid_item empty-items empty-items1">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 blank">  
+                                
+                </div>
+             </div>
+         </div>
+         </div>
+         <div class="grid_item empty-items empty-items1">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 ">  
+                                
+                </div>
+             </div>
+         </div>
+         </div>
+                  <div class="grid_item empty-items empty-items1">
+          <div class="hexagon hexagon2">
+            <div class="hexagon-in1">
+                <div class="hexagon-in2 ">  
+                                
+                </div>
+             </div>
+         </div>
+         </div>
+          
+	</article>
+    
+	</section>
+{% endblock %}

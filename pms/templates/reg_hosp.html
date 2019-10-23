@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Hospital Registration - Health Management System{% endblock %}
+
+{# {% block welcome_msg %}<h1>Welcome to Health Management System</h1>{% endblock %} #}
+
+{% block header %}
+<body class="home-bg">
+<header>
+<section class="container-fluid">
+	{% include 'menu.html' %}
+<a class="navbar-brand" href="/">Health Management System</a>
+</section>
+</header>
+{% endblock %}
+
+{% block content %}
+
+<div class="form-section">
+	{% if cd %}
+	{{ cd }}<br>
+	<a href="/">Return to main page</a>
+	{% else %}
+<h3>Register Hospital</h3>
+<form action="" method="POST" novalidate>
+	{% csrf_token %}
+	<div class="form-group row">
+        <label class="col-sm-5"><i class="fas fa-pencil-alt"></i>
+        Hospital Name <span class="colon">:</span>
+	    </label>
+        <div class="col-sm-7"> 
+        	{{ form.hospital_name }} 
+        	{{ form.hospital_name.errors }} 
+    	</div>
+	</div>
+
+	{{ form.specialities.as_hidden }} 
+
+	{% comment %}
+
+	<div class="form-group row">
+        <label class="col-sm-5"><i class="fas fa-pencil-alt"></i>
+        Specialities <span class="colon">:</span>
+	    </label>
+        <div class="col-sm-7"> 
+        	
+    	</div>
+	</div>
+	{% endcomment %}
+
+	<div class="form-group row">
+        <label class="col-sm-5"><i class="fas fa-pencil-alt"></i>
+        Area <span class="colon">:</span>
+        <small>({{ form.area.help_text|safe }})</small>
+	    </label>
+        <div class="col-sm-7"> 
+        	{{ form.area }} 
+        	{{ form.area.errors }} 
+    	</div>
+	</div>
+
+	<div class="form-group row">
+        <label class="col-sm-5"><i class="fas fa-pencil-alt"></i>
+        City <span class="colon">:</span>
+	    </label>
+        <div class="col-sm-7"> 
+        	{{ form.city }} 
+        	{{ form.city.errors }} 
+    	</div>
+	</div>
+	<input type="submit" class="btn" value="Register">
+
+</form>
+	{% endif %}
+</div>
+
+
+{% endblock %}

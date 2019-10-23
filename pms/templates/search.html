@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Search - Health Management System{% endblock %}
+
+
+{% block header %}
+<body>
+<header>
+        
+<nav class="navbar navbar-expand-lg">
+    {% include 'menu.html' %}
+<a class="navbar-brand" href="/">Health Management System</a>
+    <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item">
+            {% if request.session.utype == "doc" %}
+            <a class="nav-link" href="/doc_profile/{{ request.session.uid }}">
+                {% elif request.session.utype == "pat" %}
+            <a class="nav-link" href="">
+                {% endif %}
+            <i class="fas fa-user-circle"></i><span>{{ request.session.login_name }}</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">
+               <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+
+</nav>
+</header>
+
+{% endblock %}
+
+{% block content %}
+
+    	<div class="form-section inner-form">
+        <h3>Search Hospitals</h3><br>
+
+        {{ cd }}
+        <form method='POST' action='' novalidate> 		
+        {% csrf_token %}
+
+        <div class="form-group row">
+       		 <label class="col-sm-5"><i class="fas fa-map-marker-alt"></i>Select City<sup>*</sup> <span class="colon">:</span> </label>
+             <div class="col-sm-7">
+             <div class="selectdiv ">
+			{{ form.city }}
+            </div>
+            </div>
+             
+        </div>
+
+        <div class="form-group row">
+       		 <label class="col-sm-5"><i class="fas fa-map-marker-alt"></i>Select Area<sup>*</sup> <span class="colon">:</span> </label>
+             <div class="col-sm-7">
+             	<div class="selectdiv ">
+			{{ form.area }}
+            </div>
+            </div>
+             
+        </div>
+        <div class="form-group row">
+       		 <label class="col-sm-5"><i class="fas fa-stethoscope"></i>Select Speciality<sup>*</sup> <span class="colon">:</span> </label>
+             <div class="col-sm-7">
+             	<div class="selectdiv ">
+			{{ form.specialities }}
+            </div>
+             </div>
+             
+        </div>
+        <div class="col-sm-12 text-center">
+        <input type="submit" class="btn submit" value="submit"> 
+        </div>
+
+        {% if hosp_list %}
+        <div class="row">
+        <div class="col-sm-12">
+        <fieldset>
+            <legend><i class="far fa-hospital"></i>List of Hospital Names</legend>
+            <table class="table-styles table-responsive">
+          <tr>
+            <th>Hospital Name</th>
+            <th>Location</th>
+            <th>Specialities</th>
+            <th>Doctors</th>
+          </tr>
+          {% for h in hosp_list %}
+          <tr>
+            <td>{{ h.hospital_name }}</td>
+            <td>{{ h.area }}, {{ h.city }}</td>
+            <td>{{ h.specialities }}</td>
+            <td>{% for d in h.doctors %} 
+                <a href="/doc_profile/{{ d.id }}" title="Doctor name and Speciality">{{ d.first_name }} {% if d.last_name %} {{ d.last_name }}{% endif %}, {{ d.specialities }}</a><br>
+        {% endfor %}</td>
+          </tr>
+          {% endfor %}
+        </table>
+        {% comment %}
+            <ul class="list-unstyled list">
+             {% for h in hosp_list %}
+             <li>
+                Hospital: {{ h.hospital_name }}<br>Location: {{ h.area }}, {{ h.city }}<br>Specialities: {{ h.specialities }}
+                <br>
+                Doctors: {% for d in h.doctors %} 
+                <a href="doc_profile/{{ d.id }}>{{ d.first_name }} {% if d.last_name %} {{ d.last_name }}{% endif %}"</a><br>
+                {% endfor %}
+             </li><br>
+             {% endfor %} 
+            </ul>   
+        {% endcomment %}
+
+        </div>  
+        </div>
+        <a href='/search'>Back to Search Home</a>
+  {% endif %}
+
+        </fieldset>    
+        
+        
+                        
+{% endblock %}

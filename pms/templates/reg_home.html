@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register Home - Health Management System website{% endblock %}
+
+{# {% block welcome_msg %}<h1>Welcome to Health Management System</h1>{% endblock %} #}
+
+{% block header %}
+<body class='home-bg'>
+<header>
+<section class="container-fluid">
+    {% include 'menu.html' %}
+
+<a class="navbar-brand" href="/">Health Management System</a>
+</section>
+</header>
+{% endblock %}
+{% block content %}
+<div class="form-section inner-form">
+<h3> Select Registration Type</h3>
+<div class="row create-list">
+	<div class="col-sm-4">
+    	<a href="/register/d" title='Register Doctor'><figure>
+        <img src="{% static 'images/doctor.png' %}" title='Register Doctor'>
+        </figure>
+        <figcaption>
+        Doctor Registration
+        </figcaption>
+    </a>
+	 
+    </div>
+    <div class="col-sm-4">
+    <a href="/register/p"><figure>
+        <img src="{% static 'images/patient.png' %} " title='Register Patient'>
+        </figure>
+        <figcaption>
+        Patient Registration
+        </figcaption></a>
+    </div>
+    <div class="col-sm-4">
+     <a href="/reg_hosp"><figure>
+         <img src="{% static 'images/hospital.png' %}" title='Register Hospital'>
+        </figure>
+        <figcaption>
+       Hospital Registration
+        </figcaption></a>
+    </div>
+</div>
+
+</div>
+
+{% endblock %}

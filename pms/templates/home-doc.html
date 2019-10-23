@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Doctor Home - Health Management System{% endblock %}
+
+{# {% block welcome_msg %}<h1>Welcome to Health Management System</h1>{% endblock %} #}
+
+{% block header %}
+<header>
+        
+<nav class="navbar navbar-expand-lg">
+    {% include 'menu.html' %}
+<a class="navbar-brand" href="/">Health Management System</a>
+   <!-- <a class="navbar-brand" href="#"><img src="~/Images/Property-Mgmt-Logo.png" style="width:200px;" /></a>-->
+    <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/doc_profile/{{ request.session.uid }}">
+                <i class="fas fa-user-circle"></i>
+                <span>Dr. {{ request.session.login_name }}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">
+               <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+
+</nav>
+</header>
+{% endblock %}
+
+{% block content %}
+<section class="container">
+<div class="form-section inner-form1">
+<h3>Welcome Dr. {{ request.session.login_name }}</h3>
+
+<center class="sub-content">
+You joined Health Management System on <span>{{ date_joined }}</span>. Your last login was on <span>{{ last_login }}. </span>
+</center>
+<fieldset>
+    <legend>Your appointments today</legend>
+    {% if result_today %}
+
+       
+<table class="table-styles table-responsive">
+    <tr>
+        <th>Appt id</th>
+        <th>Date</th>
+        <th>Hospital</th>
+        <th>Department</th>
+        <th>Patient Name</th>
+        <th>Slot</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in result_today %}
+    <tr>
+        <td>{{ r.appt_id }}</td>
+        <td>{{ r.dt }}</td>
+        <td>{{ r.hospital_name }}</td>
+        <td>{{ r.spec }}</td>
+        <td>{{ r.pat_name }}</a></td>
+        <td>{{ r.slot }}</td>
+        <td  class="create-img action-icons">
+            {% if r.status == 0 %}
+            <a href='/create_pres/{{ r.appt_id }}'><i class="fas fa-edit blue" title='Create Prescription'></i></a>
+            |  
+            <a href="javascript:;" onclick = "confirm('Are you sure?') && cancel_appt({{ r.appt_id }})"><i class="red far fa-times-circle" title="Cancel Appointment"></i></a>
+            {% elif r.status == 1 %}
+            <a href='/create_pres/{{ r.appt_id }}'><i class="fas fa-edit blue" title='View/Edit Prescription'></i></a>
+            {% endif %} 
+        </td>
+        
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<h5>You have no appointments today</h5>
+{% endif %}
+</fieldset>
+
+<fieldset>
+    <legend>Your upcoming appointments</legend>
+
+{% if result_future %}
+       
+<table class="table-styles table-responsive">
+    <tr>
+        <th>Appt id</th>
+        <th>Date</th>
+        <th>Hospital</th>
+        <th>Department</th>
+        <th>Patient Name</th>
+        <th>Slot</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in result_future %}
+    <tr>
+        <td>{{ r.appt_id }}</td>
+        <td>{{ r.dt }}</td>
+        <td>{{ r.hospital_name }}</td>
+        <td>{{ r.spec }}</td>
+        <td>{{ r.pat_name }}</a></td>
+        <td>{{ r.slot }}</td>
+        <td  class="create-img action-icons">
+            {% if r.status == 0 %}
+            <a href='/create_pres/{{ r.appt_id }}'><i class="fas fa-edit blue" title='Create Prescription'></i></a>
+            |  
+            <a href="javascript:;" onclick = "confirm('Are you sure?') && cancel_appt({{ r.appt_id }})"><i class="red far fa-times-circle" title="Cancel Appointment"></i></a>
+            {% elif r.status == 1 %}
+            <a href='/create_pres/{{ r.appt_id }}'><i class="fas fa-edit blue" title='View/Edit Prescription'></i></a>
+            {% endif %} 
+        </td>
+        
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<h5>You have no upcoming appointments</h5>
+{% endif %}
+
+
+</fieldset>
+<fieldset>
+    <legend>Your past appointments</legend>
+
+{% if result_past %}       
+<table class="table-styles table-responsive">
+    <tr>
+        <th>Appt id</th>
+        <th>Date</th>
+        <th>Hospital</th>
+        <th>Department</th>
+        <th>Patient Name</th>
+        <th>Slot</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in result_past %}
+    <tr>
+        <td>{{ r.appt_id }}</td>
+        <td>{{ r.dt }}</td>
+        <td>{{ r.hospital_name }}</td>
+        <td>{{ r.spec }}</td>
+        <td>{{ r.pat_name }}</a></td>
+        <td>{{ r.slot }}</td>
+        <td  class="create-img action-icons">
+            {% if r.status == 0 %}
+            <a href='/create_pres/{{ r.appt_id }}'><i class="fas fa-edit blue" title='Create Prescription'></i></a>
+            {% elif r.status == 1 %}
+            <a href='/create_pres/{{ r.appt_id }}'><i class="fas fa-edit blue" title='View/Edit Prescription'></i></a>
+            {% endif %} 
+        </td>
+        
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<h5>You have no past appointments</h5>
+{% endif %}
+
+</fieldset>
+
+
+<form>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript"> 
+
+        function cancel_appt(appt_id) {
+
+            $.ajax({
+                url: '/cancel_appt/',
+                // type: 'GET', // defaut method is GET
+                data: {'appt_id': appt_id},
+                context: this,
+                dataType: 'json',
+
+                beforeSend: function() {
+                        // $("#add_msg").html("Processing...")
+                    },
+                
+                success: function (data) {
+                    // $("#add_msg").html(data.status);
+                    alert(data.status);
+                    location.reload();
+                },
+
+                // complete: function(){
+                //      $('#add_msg').html('');
+                //   },
+            });
+        }
+    </script>
+</section>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{% endblock %}</title>
+
+<link href="{% static 'css/menu.css' %}" rel="stylesheet">
+<link href="{% static 'css/all.css' %}" rel="stylesheet">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+<link href="{% static 'css/themify-icons.css' %}" rel="stylesheet">
+
+</head>
+
+
+{% block header %}{% endblock %}
+    
+
+    
+{% block welcome_msg %}{% endblock %}
+
+    <section class="container">
+    {% block content %}{% endblock %}
+   
+    </section>
+
+    <ul class="list-unstyled color-list">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+
+    <footer>
+        <section class="container">
+        	<div class="row">
+            	<div class="col-sm-4">
+                	<h6>About Health Management System</h6>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s scrambled it to make a type specimen book.</p>
+                </div>
+                <div class="col-sm-4">
+                	<h6>Links</h6>
+                    <ul class="list-unstyled">
+                    	<li><a href="/">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                	<h6>Get In Touch With Us</h6>
+                    <ul class="list-unstyled">
+                    	<li>Patient Management System</li>
+                        <li> <i class="fas fa-mobile-alt"></i> 9876543210</li>
+                        <li> <i class="fas fa-envelope-open"></i> abc@xyz.com</li>
+                       	<li class="social-icons"> <a href="#"><i class="fab fa-facebook-square"></i></a>
+                       		 <a href="#"><i class="fab fa-twitter-square"></i></a>
+                             <a href="#"><i class="fab fa-google-plus-square"></i></a>
+                        </li>
+                     </ul>
+                    	
+                       
+                       
+                    
+                </div>
+            </div>
+        </section>
+        <div class="copyright">
+			<p> © 2019 Health Management System. All rights reserved</p>
+		</div>	
+    </footer>
+
+
+</body>
+</html>

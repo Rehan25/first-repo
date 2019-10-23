@@ -1,0 +1,29 @@
+<div class="nav_menu dropdown">
+<button class="dropbtn menu-btn"><i class="fas fa-bars"></i></button>
+<div class="dropdown-content">
+	{% if request.session.utype == "pat" %}
+	<a href="/book_appt"><i class="fas fa-calendar-alt"></i>Create Appointment</a>
+	<a href="/search/d"><i class="fas fa-user-md"></i>Search Doctors</a>
+	<a href="#/search/h"><i class="fas fa-user-md"></i>Search Hospitals</a>
+	<a href="#"><i class="fas fa-user-md"></i>Labs</a>
+	<a href="#"><i class="fas fa-user-md"></i>Billing</a>
+	<a href="#"><i class="fas fa-user-md"></i>Pharmacy</a>
+	{% elif request.session.utype == "doc" %}
+	<a href="/search/d"><i class="fas fa-user-md"></i>Search Doctors</a>
+	<a href="/search/h"><i class="fas fa-user-md"></i>Search Hospitals</a>
+	<a href="#"><i class="fas fa-user-md"></i>Labs</a>
+	<a href="#"><i class="fas fa-user-md"></i>Billing</a>
+	<a href="#"><i class="fas fa-user-md"></i>Pharmacy</a>
+	{% else %}
+	<a href="#"><i class="fas fa-user-md"></i>About</a>
+	<a href="#"><i class="fas fa-user-md"></i>Contact</a>
+	<a href="#"><i class="fas fa-user-md"></i>Services</a>
+
+	{% endif %}
+
+{% comment %}
+<a href="create-prescription.html"><i class="fas fa-prescription"></i>Create Prescription</a>
+<a href="create-referral.html"><i class="fas fa-calendar-alt"></i>Create Referral</a>
+{% endcomment %}
+</div>
+</div>

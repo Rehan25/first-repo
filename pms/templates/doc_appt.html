@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Doctor Appointment - Health Management System{% endblock %}
+
+{# {% block welcome_msg %}<h1>Welcome to Health Management System</h1>{% endblock %} #}
+
+{% block header %}
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            {% include 'menu.html' %}
+
+		<a class="navbar-brand" href="/">Health Management System</a>
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-user-circle"></i>
+                        <span>{{ request.session.login_name }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">
+                       <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+    </header>
+{% endblock %}
+{% block content %}
+<section class="container">
+    <div class="form-section inner-form">
+    {% if result %}
+        <center><h3>Appointment slots for Dr. {{ doc_name }}</h3></center>
+        
+    {% for r in result %}
+    <h5>{{ r.hosp_name }}, {{ r.hosp_city }}</h5>
+
+    <table class="table-styles">
+        <tr>
+            <th>Date</th>
+            <th>Slot</th>
+            <th>Status</th>
+        </tr>
+    {% for data in r.data %}
+        <tr>
+            <td>{{data.dt}}</td>
+            <td>{{data.slot}}</td>
+            <td>
+                {% if data.status == 'Book now' %}
+                    <a onclick = "return confirm('Confirm appointment booking?')" href='/book_appt/{{pat_id}}/{{doc_id}}/{{slot_id}}/{{r.hosp_id}}/{{spec}}/{{data.dt2}}'><i class="far fa-hand-point-right"></i>{{data.status}}</a>
+                {% else %}
+                {{ data.status }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% endfor %}
+
+    {% else %}
+    <center>This doctor is not linked to any hospital. So appointments cannot be booked. <br>
+        <a href="book_appt/">Back to appointments page</a>
+    </center>
+    {% endif %}
+</div>
+
+</section>
+{% endblock %}

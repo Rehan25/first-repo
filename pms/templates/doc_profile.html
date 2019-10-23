@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Doctor Profile - Health Management System{% endblock %}
+
+
+{% block header %}
+<body>
+<header>
+<nav class="navbar navbar-expand-lg">
+    {% include 'menu.html' %}
+
+<a class="navbar-brand" href="/">Health Management System</a>
+<ul class="nav navbar-nav ml-auto">
+    <li class="nav-item">
+        {% if request.session.utype == "pat" %}
+    <a class="nav-link" href="#">
+        {% else %}
+        <a class="nav-link" href="/doc_profile/{{ request.session.uid }}">
+        {% endif %}
+        <i class="fas fa-user-circle"></i>
+        <span>{{ request.session.login_name }}</span>
+    </a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="/logout">
+       <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+    </a>
+    </li>
+</ul>
+
+</nav>
+</header>
+<section>
+
+<img src="{% static 'images/doctor-profile.png' %}" style="width:100%;">
+</section>
+
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+
+<div class="row">
+  <div class="col-sm-4 text-right">
+    <img src="{% static 'images/doctorM.png' %}" class="img-thumbnail">
+</div>
+<div class="col-sm-8">
+    <h5>Dr. {{ doc_name }}</h5>
+   <p> <i class="fas fa-stethoscope"></i>{{ specialities }}</p>
+    
+</div>
+
+</div>
+
+</div>
+<div class="form-section inner-form mt-0">
+<div class="row">
+    <div class="col-sm-8">
+        <div class="row">
+<div class="col-sm-12">
+
+            <h5><i class="fas fa-stethoscope"></i>Qualification</h5>
+                <ul class="list-unstyled list">
+                    <li>{{ edu }}</li>
+                </ul>
+                
+            </div>
+ <div class="col-sm-12">
+            <h5><i class="far fa-hospital"></i>Alma Mater</h5>
+                <ul class="list-unstyled list">
+                <li>{{ alma_mater }}</li>
+                </ul>
+            </div>
+<div class="col-sm-12">
+            <h5><i class="far fa-hospital"></i>List of Hospital Names</h5>
+                <ul class="list-unstyled list">
+                {% for h in hospitals %}
+                <li>{{ h.hospital_name }}, {{h.city}}</li>
+                {% endfor %}                        
+                
+                </ul>
+            </div>
+           
+        </div>
+
+    </div>
+    {% if request.session.utype == "pat" %}
+     <div class="col-sm-4">
+        <a href='/doc_appt/{{doc_id}}' class="btn btn-outline-primary">Book Appointment</a>
+    </div>
+    {% endif %}
+</div>
+
+</div>
+{% endblock %}

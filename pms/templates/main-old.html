@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Health Management System website{% endblock %}
+
+{% block welcome_msg %}<h1>Welcome to Health Management System</h1>{% endblock %}
+
+
+        {% block header %}
+        <body class='main-bg'>
+    <header>
+        <section class="container-fluid">
+        <a class="navbar-brand" href="/">Health Management System</a>
+        </section>
+    </header>
+        {% endblock %}
+
+{% block content %}
+<div class="row login-members">
+    <div class="col-sm-4">
+        <figure>
+        	<img src="{% static 'images/doctor.png' %}">  
+        </figure>
+        <figcaption><a href="/login/">Doctor</a>
+        </figcaption>
+    </div>
+
+    <div class="col-sm-4">
+        <figure>
+       	<img src="{% static 'images/patient.png' %}">
+            
+        </figure>
+        <figcaption><a href="/login/">Patient</a>
+        </figcaption>
+    </div>
+
+    <div class="col-sm-4">
+        <figure>
+        	<img src="{% static 'images/hospital.png' %}">
+            
+        </figure>
+        <figcaption><a href="/login/">Hospital</a>
+        </figcaption>	
+    </div>	
+</div>
+
+    <div class="row bottom-part">
+        <div class="col-sm-12">
+            <p>Not Registered ?</p>
+            <a href="/register/" class="btn btn-primary">Register Now</a>
+        </div>
+    </div>
+{% endblock %}

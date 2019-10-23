@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Health Management System website{% endblock %}
+
+{% block header %}
+<body class='home-bg'>
+
+<header>
+<section class="container-fluid">
+	{% include 'menu.html' %}
+
+<a class="navbar-brand" href="/">Health Management System</a>
+</section>
+</header>
+{% endblock %}
+{% block content %}
+<div class='form-section'>
+
+{{ form.as_table }}
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+	    $("#id_email").change(function () {
+	    console.log( $(this).val() );
+	    var username = $(this).val();
+
+	    $.ajax({
+	    	url: '/validate_username/',
+            data: {'email': username},
+            
+            dataType: 'json',
+            
+            success: function (data) {
+              if (data.is_taken) {
+                console.log("A user with this username already exists.");
+              }
+              else { console.log("Email id not registered yet")}
+            }
+          });
+	     
+	    });
+	</script>
+{% endblock %}

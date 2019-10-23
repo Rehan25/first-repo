@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Doctor-Hospital mapping - Health Management System{% endblock %}
+
+{% block header %}
+<header>
+        
+<nav class="navbar navbar-expand-lg">
+{% include 'menu.html' %}
+<a class="navbar-brand" href="/">Health Management System</a>
+   <!-- <a class="navbar-brand" href="#"><img src="~/Images/Property-Mgmt-Logo.png" style="width:200px;" /></a>-->
+    <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item">
+            {% if request.session.utype == "doc" %}
+            <a class="nav-link" href="/doc_profile/{{ request.session.uid }}">
+                {% else %}
+                <a class="nav-link" href="#">
+                    {% endif %}
+                <i class="fas fa-user-circle"></i>
+                <span>{{ request.session.login_name }}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/logout">
+               <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+
+</nav>
+</header>
+{% endblock %}
+{% block content %}
+<div class='form-section'>
+
+<form id="hdform" action="" method="POST" novalidate>
+	{% csrf_token %}
+	<h3>Manage hospital - doctor mapping</h3> <br>
+	<div class="form-group row">
+        <label class="col-sm-5"><i class="fas fa-edit"></i>
+        Select Hospital <span class="colon">:</span>
+	    </label>
+        <div class="col-sm-7"> 
+        	<div class="select-div">{{ form.hospitals }} </div>
+        	{{ form.first_name.errors }}
+    	</div>
+	</div>
+	<div class="form-group row">
+        <label class="col-sm-5"><i class="fas fa-pencil-alt"></i>
+        Select Doctor <span class="colon">:</span>
+	    </label>
+        <div class="col-sm-7"> 
+        	<div class="select-div">{{ form.doctors }} </div>
+        	{{ form.last_name.errors }}
+    	</div>
+	</div> <br>
+	<input type="Submit" value="Create link">
+</form>
+<br>
+<span class="red" id="add_msg"></span>
+
+<br><br>
+<fieldset>
+	<legend>Hospital Doctor Mapping</legend>
+<table class="table-styles table-responsive">
+	<tr>
+		<th>Hospital Name</th>
+		<th>Doctors associated</th>
+		<th>Action</th>
+	</tr>
+	{% for x in data %}
+	<tr>
+		<td>{{ x.hospital_name }} (id = {{ x.hosp_id }})</td>
+		<td>
+		{% for doc in x.doctors %}
+		<a href='/doc_profile/{{ doc.id }}'>{{ doc.name }} (id = {{ doc.id }}, {{ doc.spec }})</a> 
+		<br> 
+		{% endfor %}
+		
+		</td>
+		<td>
+			{% for doc in x.doctors %}
+			<a href='javascript:;' onclick = "confirm('Are you sure?') && remove_hd({{ x.hosp_id }},{{ doc.id }})">Remove (h={{ x.hosp_id }} & d = {{ doc.id }})</a>
+			<br>
+			{% endfor %}
+		</td>
+	</tr>
+	{% endfor %} 
+</table>
+</fieldset>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript">
+	    
+	    $("#hdform").submit(add_hd);
+
+	    function add_hd() {
+		    // console.log( $("#id_email").val() );
+		    var hosp_id = $("#id_hospitals").val();
+		    var doc_id = $("#id_doctors").val();
+		    console.log(hosp_id + ',' + doc_id)
+
+		    $.ajax({
+		    	url: '/add_hd/',
+		    	// type: 'GET', // defaut method is GET
+	            data: {'hosp_id': hosp_id, 'doc_id': doc_id},
+	            context: this,
+	            dataType: 'json',
+
+	            beforeSend: function() {
+	                    $("#add_msg").html("Processing...")
+	                },
+	            
+	            success: function (data) {
+	            	$("#add_msg").html(data.status_msg);
+
+	            	if (data.status_code == 1) {
+	            		this.submit();
+	            	}
+	            	
+	            	
+	            	// this.submit()
+	            	// if (data.result) {
+	            	// 	$("#add_msg").html("Already linked");
+	            	// }
+	            	// else {
+	            	// 	$("#add_msg").html("Linking...");
+	            	// 	// this.submit();
+	            	// }
+	            },
+
+	            complete: function(){
+	                 // $('#add_msg').html('');
+	              },
+	        });
+	        return false;
+	     
+	    }
+
+	    function remove_hd(hosp_id, doc_id) {
+
+	    	$.ajax({
+		    	url: '/remove_hd/',
+		    	// type: 'GET', // defaut method is GET
+	            data: {'hosp_id': hosp_id, 'doc_id': doc_id},
+	            context: this,
+	            dataType: 'json',
+
+	            beforeSend: function() {
+	                    $("#add_msg").html("Processing...")
+	                },
+	            
+	            success: function (data) {
+	            	$("#add_msg").html(data.status);
+	            	location.reload();
+	            },
+
+	            // complete: function(){
+	            //      $('#add_msg').html('');
+	            //   },
+	        });
+	    }
+
+	</script>
+{% endblock %}

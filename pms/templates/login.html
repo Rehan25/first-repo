@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login - Health Management System{% endblock %}
+
+{# {% block welcome_msg %}<h1>Welcome to Health Management System</h1>{% endblock %} #}
+
+        {% block header %}
+        <body class='home-bg'>
+        <header>
+        <section class="container-fluid">
+                {% include 'menu.html' %}
+
+        <a class="navbar-brand" href="/">Health Management System</a>
+        </section>
+    </header>
+        {% endblock %}
+{% block content %}
+
+<div class="form-section">
+    <h2>
+        Login
+        <br>
+        {% comment %}
+        {% if user_type == 'd' %}
+            Doctor Login
+        {% elif user_type == 'p' %}
+            Patient Login
+        {% elif user_type == 'h' %}
+            Hospital Login
+        {% endif %}
+        {% endcomment %}
+
+    </h2>
+	<form method="post" action="" novalidate="">
+        {% csrf_token %}
+
+        <div class="row">
+        	<div class="col-sm-12">
+            <div class="form-group">
+             <label><i class="fas fa-pencil-alt"></i>Login ID  </label>
+				<input type="text" name="username" class="form-control" placeholder="" required/>
+            </div>
+             <div class="form-group">
+             <label><i class="fas  fa-key"></i>Password  </label>
+				<input type="password" name="password" class="form-control" placeholder="" required/>	
+            </div>
+           		
+            </div>
+            <div class="col-sm-12">
+                <input type="checkbox" id="rememberme" value="">
+                <label for="rememberme"><span></span> Remember me ?</label>
+                <br /><br />
+                <div style="color:red; font-weight: bold; font-size: 17px;">{{ status }}</div>
+
+                <input type="submit" class="mt-5 btn" value="SIGN IN">
+            </div>
+
+        </div>
+		<div class="row mt-3">
+        	<div class="col-sm-6">
+            <a href="#">Forgot password ?</a>
+            </div>
+            <div class="col-sm-6 text-right">
+            <a href="/register">Sign Up</a>
+            </div>
+        </div>
+		
+    </form>
+</div>
+{% endblock %}
